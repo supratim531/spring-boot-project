@@ -1,6 +1,6 @@
 package com.company.recap3.exceptionhandlers;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		Map<String, String> error = new HashMap<>();
+		Map<String, String> error = new LinkedHashMap<>();
 		error.put("code", e.getErrorCode());
 		error.put("message", e.getErrorMessage());
 		ErrorResponse errorResponse = ErrorResponse.getErrorResponse(status.value(), "Not Found", request, error);
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
 			HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		Map<String, String> error = new HashMap<>();
+		Map<String, String> error = new LinkedHashMap<>();
 		e.getBindingResult().getAllErrors().forEach((_error) -> {
 			String key = ((FieldError) _error).getField();
 			String value = _error.getDefaultMessage();
