@@ -3,11 +3,11 @@ package com.company.recap3.repositories;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
 import com.company.recap3.entities.Book;
 
-public interface BookRepository extends JpaRepository<Book, Integer> {
+public interface BookRepository extends ListCrudRepository<Book, Integer> {
 
 	List<Book> findAll(Sort sort);
 
