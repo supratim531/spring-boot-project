@@ -11,6 +11,8 @@ public interface BookService {
 
 	List<Book> findAllBooks();
 
+	List<Book> findAllBooksByOrderBy(String field, String order);
+
 	Book findBookById(Integer bookId);
 
 	Book updateBookById(Integer bookId, Integer authorId, BookDTO bookDTO);

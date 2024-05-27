@@ -42,6 +42,13 @@ public class BookController {
 		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
 
+	@GetMapping("/sort")
+	public ResponseEntity<List<Book>> findAllBooksByOrderBy(@RequestParam String property,
+			@RequestParam(defaultValue = "ASC") String direction) {
+		List<Book> books = this.bookService.findAllBooksByOrderBy(property, direction);
+		return new ResponseEntity<>(books, HttpStatus.OK);
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Book> findBookById(@PathVariable("id") Integer bookId) {
 		Book book = this.bookService.findBookById(bookId);
@@ -67,9 +74,17 @@ public class BookController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
-	@GetMapping("/priceRange")
-	public ResponseEntity<List<Book>> findBookByPriceBetween(@RequestParam Long start, @RequestParam Long end) {
-		List<Book> books = this.bookService.findBookByPriceBetween(start, end);
+	@GetMapping("/price")
+	public ResponseEntity<List<Book>> findBookByPriceBetween(@RequestParam(name = "start") Long startPrice,
+			@RequestParam(name = "end") Long endPrice) {
+		List<Book> books = this.bookService.findBookByPriceBetween(startPrice, endPrice);
+		return new ResponseEntity<>(books, HttpStatus.OK);
+	}
+
+	@GetMapping("/releasedYear")
+	public ResponseEntity<List<Book>> findBookByReleasedYearBetween(@RequestParam(name = "start") String startYear,
+			@RequestParam(name = "end") String endYear) {
+		List<Book> books = this.bookService.findBookByReleasedYearBetween(startYear, endYear);
 		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
 

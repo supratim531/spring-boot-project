@@ -19,4 +19,8 @@ public interface AuthorService {
 
 	void deleteAuthorById(Integer authorId);
 
+	Author findAuthorByEmailOrPhone(String email, String phone);
+
+	List<Author> findAllAuthorsByEmailPattern(String pattern);
+
 }

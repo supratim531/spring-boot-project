@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.recap3.dtos.AuthorDTO;
@@ -34,9 +35,15 @@ public class AuthorController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<List<Author>> findAllAuthors() {
+	public ResponseEntity<?> findAllAuthors(@RequestParam(required = false) String email,
+			@RequestParam(required = false) String phone) {
+		if (email != null || phone != null) {
+			Author author = this.authorService.findAuthorByEmailOrPhone(email, phone);
+			return new ResponseEntity<Author>(author, HttpStatus.OK);
+		}
+
 		List<Author> authors = this.authorService.findAllAuthors();
-		return new ResponseEntity<>(authors, HttpStatus.OK);
+		return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -62,6 +69,12 @@ public class AuthorController {
 	public ResponseEntity<Void> deleteAuthorById(@PathVariable("id") Integer authorId) {
 		this.authorService.deleteAuthorById(authorId);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity<List<Author>> findAllAuthorsByEmailPattern(@RequestParam String pattern) {
+		List<Author> authors = this.authorService.findAllAuthorsByEmailPattern(pattern);
+		return new ResponseEntity<>(authors, HttpStatus.OK);
 	}
 
 }

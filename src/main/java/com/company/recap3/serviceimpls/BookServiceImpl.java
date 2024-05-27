@@ -3,6 +3,7 @@ package com.company.recap3.serviceimpls;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.company.recap3.dtos.BookDTO;
@@ -39,6 +40,18 @@ public class BookServiceImpl implements BookService {
 
 		if (books.size() == 0) {
 			throw EntityNotFoundException.builder().errorMessage("No book exists").build();
+		}
+
+		return books;
+	}
+
+	@Override
+	public List<Book> findAllBooksByOrderBy(String property, String direction) {
+		Sort sort = Sort.by(Sort.Direction.fromString(direction), property);
+		List<Book> books = this.bookRepository.findAll(sort);
+
+		if (books.size() == 0) {
+			throw EntityNotFoundException.builder().errorMessage("No books found").build();
 		}
 
 		return books;

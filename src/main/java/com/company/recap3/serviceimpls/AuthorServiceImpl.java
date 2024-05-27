@@ -80,4 +80,34 @@ public class AuthorServiceImpl implements AuthorService {
 		this.authorRepository.delete(savedAuthor);
 	}
 
+	@Override
+	public Author findAuthorByEmailOrPhone(String email, String phone) {
+		String errorMessage;
+
+		if (email != null && phone != null) {
+			errorMessage = "No author found with both email & phone" + email + " & " + phone;
+		} else if (email != null) {
+			errorMessage = "No author found with email " + email;
+		} else {
+			errorMessage = "No author found with phone " + phone;
+		}
+
+		final String finalErrorMessage = errorMessage;
+
+		return this.authorRepository.findByEmailOrPhone(email, phone)
+				.orElseThrow(() -> EntityNotFoundException.builder().errorMessage(finalErrorMessage).build());
+	}
+
+	@Override
+	public List<Author> findAllAuthorsByEmailPattern(String pattern) {
+		List<Author> authors = this.authorRepository.findAllByEmailPattern(pattern);
+
+		if (authors.size() == 0) {
+			throw EntityNotFoundException.builder()
+					.errorMessage("No authors found with this email pattern '" + pattern + "'").build();
+		}
+
+		return authors;
+	}
+
 }
