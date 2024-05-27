@@ -34,7 +34,7 @@ public class AuthorServiceImpl implements AuthorService {
 		List<Author> authors = this.authorRepository.findAll();
 
 		if (authors.size() == 0) {
-			throw new EntityNotFoundException("ERR2002-420", "No author exists");
+			throw EntityNotFoundException.builder().errorMessage("No author exists").build();
 		}
 
 		return authors;
@@ -42,8 +42,8 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author findAuthorById(Integer authorId) {
-		return this.authorRepository.findById(authorId)
-				.orElseThrow(() -> new EntityNotFoundException("ERR2002-420", "No author found with id " + authorId));
+		return this.authorRepository.findById(authorId).orElseThrow(
+				() -> EntityNotFoundException.builder().errorMessage("No author found with id " + authorId).build());
 	}
 
 	@Override

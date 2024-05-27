@@ -108,7 +108,8 @@ public class BookServiceImpl implements BookService {
 
 		if (books.size() == 0) {
 			throw EntityNotFoundException.builder()
-					.errorMessage("No books found between " + startPrice + " and " + endPrice + " price range").build();
+					.errorMessage("No books found between rupees " + startPrice + " to " + endPrice + " price range")
+					.build();
 		}
 
 		return books;
