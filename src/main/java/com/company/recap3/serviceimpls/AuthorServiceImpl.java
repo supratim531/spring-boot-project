@@ -9,7 +9,7 @@ import com.company.recap3.dtos.AuthorDTO;
 import com.company.recap3.entities.Author;
 import com.company.recap3.entities.Book;
 import com.company.recap3.exceptions.EntityNotFoundException;
-import com.company.recap3.mapper.AuthorMapper;
+import com.company.recap3.mappers.AuthorMapper;
 import com.company.recap3.repositories.AuthorRepository;
 import com.company.recap3.repositories.BookRepository;
 import com.company.recap3.services.AuthorService;

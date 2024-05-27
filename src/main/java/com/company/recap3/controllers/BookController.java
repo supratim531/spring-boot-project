@@ -1,4 +1,4 @@
-package com.company.recap3.controller;
+package com.company.recap3.controllers;
 
 import java.util.List;
 

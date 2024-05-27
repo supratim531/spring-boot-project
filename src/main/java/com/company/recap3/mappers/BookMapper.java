@@ -1,4 +1,4 @@
-package com.company.recap3.mapper;
+package com.company.recap3.mappers;
 
 import org.modelmapper.ModelMapper;
 
