@@ -18,7 +18,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.company.recap3.exceptions.EntityNotFoundException;
-import com.company.recap3.exceptions.RequestBodyPropertyException;
 import com.company.recap3.models.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,24 +40,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		errorResponse.setError(error);
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-	}
-
-	@ExceptionHandler(RequestBodyPropertyException.class)
-	public ResponseEntity<ErrorResponse> handleRequestBodyProperty(RequestBodyPropertyException e,
-			HttpServletRequest request) {
-		Map<String, String> error = new HashMap<>();
-		error.put("code", e.getErrorCode());
-		error.put("message", e.getErrorMessage());
-
-		ErrorResponse errorResponse = new ErrorResponse();
-		errorResponse.setTimestamp(LocalDateTime.now());
-		errorResponse.setMethod(request.getMethod());
-		errorResponse.setTitle("Bad Request");
-		errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-		errorResponse.setPath(request.getRequestURI());
-		errorResponse.setError(error);
-
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

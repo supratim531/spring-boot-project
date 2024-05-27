@@ -9,7 +9,6 @@ import com.company.recap3.dtos.BookDTO;
 import com.company.recap3.entities.Author;
 import com.company.recap3.entities.Book;
 import com.company.recap3.exceptions.EntityNotFoundException;
-import com.company.recap3.exceptions.RequestBodyPropertyException;
 import com.company.recap3.mapper.BookMapper;
 import com.company.recap3.repositories.BookRepository;
 import com.company.recap3.services.AuthorService;
@@ -25,15 +24,9 @@ public class BookServiceImpl implements BookService {
 	private AuthorService authorService;
 
 	@Override
-	public Book saveBook(BookDTO bookDTO) {
+	public Book saveBook(Integer authorId, BookDTO bookDTO) {
 		Book book = BookMapper.convertToBook(bookDTO);
-
-		if (book.getAuthor() == null || book.getAuthor().getAuthorId() == null) {
-			throw new RequestBodyPropertyException("ERR2002-108",
-					"authorId not provided for author (eg. 'author':{'authorId':1})");
-		}
-
-		Author author = this.authorService.findAuthorById(book.getAuthor().getAuthorId());
+		Author author = this.authorService.findAuthorById(authorId);
 
 		book.setAuthor(author);
 		author.setBook(book);
@@ -45,7 +38,7 @@ public class BookServiceImpl implements BookService {
 		List<Book> books = this.bookRepository.findAll();
 
 		if (books.size() == 0) {
-			throw new EntityNotFoundException("ERR2002-420", "No book exists");
+			throw EntityNotFoundException.builder().errorMessage("No book exists").build();
 		}
 
 		return books;
@@ -53,51 +46,34 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Book findBookById(Integer bookId) {
-		return this.bookRepository.findById(bookId)
-				.orElseThrow(() -> new EntityNotFoundException("ERR2002-420", "Book not found with id " + bookId));
+		return this.bookRepository.findById(bookId).orElseThrow(
+				() -> EntityNotFoundException.builder().errorMessage("Book not found with id " + bookId).build());
 	}
 
 	@Override
-	public List<Book> findBookByTitleContaining(String title) {
-		List<Book> books = this.bookRepository.findByTitleContaining(title);
-
-		if (books.size() == 0) {
-			throw new EntityNotFoundException("ERR2002-420", "No book exists which contains '" + title + "'");
-		}
-
-		return books;
-	}
-
-	@Override
-	public Book updateBookById(Integer bookId, BookDTO bookDTO) {
+	public Book updateBookById(Integer bookId, Integer authorId, BookDTO bookDTO) {
 		Book oldBook = this.findBookById(bookId);
-		Author oldAuthor = oldBook.getAuthor();
-
+		Author attachedAuthor = oldBook.getAuthor();
 		Book book = BookMapper.convertToBook(bookDTO);
-
-		if (book.getAuthor() == null || book.getAuthor().getAuthorId() == null) {
-			throw new RequestBodyPropertyException("ERR2002-108",
-					"authorId not provided for author (eg. 'author':{'authorId':1})");
-		}
-
-		Author author = this.authorService.findAuthorById(book.getAuthor().getAuthorId());
 
 		oldBook.setTitle(book.getTitle());
 		oldBook.setPrice(book.getPrice());
 		oldBook.setReview(book.getReview());
 		oldBook.setReleasedYear(book.getReleasedYear());
 
-		if (author.equals(oldAuthor)) {
-			System.out.println("Author matched");
+		if (authorId == null) {
 		} else {
-			System.out.println("Author didn't matched");
+			Author author = this.authorService.findAuthorById(authorId);
 
-			if (oldAuthor != null) {
-				oldAuthor.setBook(null);
+			if (author.equals(attachedAuthor)) {
+			} else {
+				oldBook.setAuthor(author);
+				author.setBook(oldBook);
+
+				if (attachedAuthor != null) {
+					attachedAuthor.setBook(null);
+				}
 			}
-
-			oldBook.setAuthor(author);
-			author.setBook(oldBook);
 		}
 
 		return this.bookRepository.save(oldBook);
@@ -105,13 +81,49 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public void deleteAllBooks() {
-		this.bookRepository.deleteAll();
+		this.bookRepository.deleteAll(this.findAllBooks());
 	}
 
 	@Override
 	public void deleteBookById(Integer bookId) {
 		Book savedBook = this.findBookById(bookId);
 		this.bookRepository.delete(savedBook);
+	}
+
+	@Override
+	public List<Book> findBookByTitleContaining(String title) {
+		List<Book> books = this.bookRepository.findByTitleContaining(title);
+
+		if (books.size() == 0) {
+			throw EntityNotFoundException.builder().errorMessage("No book exists which contains '" + title + "'")
+					.build();
+		}
+
+		return books;
+	}
+
+	@Override
+	public List<Book> findBookByPriceBetween(Long startPrice, Long endPrice) {
+		List<Book> books = this.bookRepository.findByPriceBetween(startPrice, endPrice);
+
+		if (books.size() == 0) {
+			throw EntityNotFoundException.builder()
+					.errorMessage("No books found between " + startPrice + " and " + endPrice + " price range").build();
+		}
+
+		return books;
+	}
+
+	@Override
+	public List<Book> findBookByReleasedYearBetween(String startYear, String endYear) {
+		List<Book> books = this.bookRepository.findByReleasedYearBetween(startYear, endYear);
+
+		if (books.size() == 0) {
+			throw EntityNotFoundException.builder()
+					.errorMessage("No books found between " + startYear + " and " + endYear + " timeline").build();
+		}
+
+		return books;
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.company.recap3.dtos;
 
-import com.company.recap3.entities.Author;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +33,6 @@ public class BookDTO {
 	@Pattern(regexp = "^[1-9]\\d{3}$", message = "Must be a valid year")
 	private String releasedYear;
 
-	private Author author;
+//	private Author author;
 
 }

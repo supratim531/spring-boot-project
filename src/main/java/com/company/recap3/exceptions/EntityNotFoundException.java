@@ -15,7 +15,8 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 public class EntityNotFoundException extends RuntimeException {
 
-	private String errorCode;
+	@Builder.Default
+	private String errorCode = "ERR2002-420";
 	private String errorMessage;
 
 }

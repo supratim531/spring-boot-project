@@ -1,7 +1,5 @@
 package com.company.recap3.dtos;
 
-import com.company.recap3.entities.Book;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -33,6 +31,6 @@ public class AuthorDTO {
 	@NotBlank(message = "Phone number cannot be empty or null")
 	private String phone;
 
-	private Book book;
+//	private Book book;
 
 }

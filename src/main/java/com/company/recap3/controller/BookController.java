@@ -29,20 +29,15 @@ public class BookController {
 	private BookService bookService;
 
 	@PostMapping("")
-	public ResponseEntity<Book> saveBook(@Valid @RequestBody BookDTO bookDTO) {
-		Book savedBook = this.bookService.saveBook(bookDTO);
+	public ResponseEntity<Book> saveBook(@RequestParam Integer authorId, @Valid @RequestBody BookDTO bookDTO) {
+		Book savedBook = this.bookService.saveBook(authorId, bookDTO);
 		return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
 	}
 
 	@GetMapping("")
 	public ResponseEntity<List<Book>> findAllBooks(@RequestParam(required = false) String title) {
-		List<Book> books = null;
-
-		if (title == null) {
-			books = this.bookService.findAllBooks();
-		} else {
-			books = this.bookService.findBookByTitleContaining(title);
-		}
+		List<Book> books = (title == null) ? this.bookService.findAllBooks()
+				: this.bookService.findBookByTitleContaining(title);
 
 		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
@@ -55,8 +50,8 @@ public class BookController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Book> updateBookById(@PathVariable("id") Integer bookId,
-			@Valid @RequestBody BookDTO bookDTO) {
-		Book updatedBook = this.bookService.updateBookById(bookId, bookDTO);
+			@RequestParam(required = false) Integer authorId, @Valid @RequestBody BookDTO bookDTO) {
+		Book updatedBook = this.bookService.updateBookById(bookId, authorId, bookDTO);
 		return new ResponseEntity<>(updatedBook, HttpStatus.CREATED);
 	}
 
@@ -70,6 +65,12 @@ public class BookController {
 	public ResponseEntity<Void> deleteBookById(@PathVariable("id") Integer bookId) {
 		this.bookService.deleteBookById(bookId);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("/priceRange")
+	public ResponseEntity<List<Book>> findBookByPriceBetween(@RequestParam Long start, @RequestParam Long end) {
+		List<Book> books = this.bookService.findBookByPriceBetween(start, end);
+		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
 
 }
