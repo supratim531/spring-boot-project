@@ -30,7 +30,7 @@ public class Recap3Application implements CommandLineRunner {
 		Faker faker = new Faker();
 		FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-GB"), new RandomService());
 
-		List<Author> authors = IntStream.rangeClosed(1, 100).mapToObj(author -> {
+		List<Author> authors = IntStream.rangeClosed(1, 100).mapToObj(number -> {
 			String email = faker.internet().emailAddress();
 			String firstName = faker.name().firstName();
 			String lastName = faker.name().lastName();
@@ -39,7 +39,6 @@ public class Recap3Application implements CommandLineRunner {
 		}).toList();
 
 		this.authorRepository.saveAll(authors);
-
 		System.out.println("\nSpring Boot Application is up and running...\n");
 	}
 

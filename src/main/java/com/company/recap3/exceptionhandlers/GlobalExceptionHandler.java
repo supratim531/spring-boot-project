@@ -3,6 +3,8 @@ package com.company.recap3.exceptionhandlers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
@@ -32,6 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		error.put("code", e.getErrorCode());
 		error.put("message", e.getErrorMessage());
 		ErrorResponse errorResponse = ErrorResponse.getErrorResponse(status.value(), "Not Found", request, error);
+		logger.error("{}: {}", e.getErrorMessage(), errorResponse);
 
 		return new ResponseEntity<>(errorResponse, status);
 	}
@@ -41,6 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		ErrorResponse errorResponse = ErrorResponse.getErrorResponse(status.value(), "Bad Request", request,
 				e.getMessage());
+		logger.error("{}: {}", e.getMessage(), errorResponse);
 
 		return new ResponseEntity<>(errorResponse, status);
 	}
@@ -51,6 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		ErrorResponse errorResponse = ErrorResponse.getErrorResponse(status.value(), "Bad Request", request,
 				e.getMessage());
+		logger.error("{}: {}", e.getMessage(), errorResponse);
 
 		return new ResponseEntity<>(errorResponse, status);
 	}
@@ -65,6 +72,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 		ErrorResponse errorResponse = ErrorResponse.getErrorResponse(status.value(), "Bad Request", servletRequest,
 				e.getMessage());
+		logger.error("{}: {}", e.getMessage(), errorResponse);
 
 		return new ResponseEntity<>(errorResponse, status);
 
@@ -86,6 +94,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 		ErrorResponse errorResponse = ErrorResponse.getErrorResponse(status.value(), "Bad Request", servletRequest,
 				error);
+		logger.error("Method argument not valid: {}", errorResponse);
 
 		return new ResponseEntity<>(errorResponse, status);
 	}

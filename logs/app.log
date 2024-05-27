@@ -1,0 +1,7 @@
+27-05-2024 19:52:38 INFO org.springframework.boot.StartupInfoLogger - Starting Recap3Application using Java 17.0.2 with PID 17172 (C:\Users\SUPRATIM\Desktop\spring-boot-project\target\classes started by SUPRATIM in C:\Users\SUPRATIM\Desktop\spring-boot-project)
+27-05-2024 19:52:38 DEBUG org.springframework.boot.StartupInfoLogger - Running with Spring Boot v3.3.0, Spring v6.1.8
+27-05-2024 19:52:38 INFO org.springframework.boot.SpringApplication - No active profile set, falling back to 1 default profile: "default"
+27-05-2024 19:52:43 INFO org.springframework.boot.StartupInfoLogger - Started Recap3Application in 5.034 seconds (process running for 5.621)
+27-05-2024 19:53:00 ERROR com.company.recap3.exceptionhandlers.GlobalExceptionHandler - No book exists: ErrorResponse(timestamp=2024-05-27T19:53:00.887371800, method=GET, title=Not Found, status=404, path=/api/v1/book, error={code=ERR2002-420, message=No book exists})
+27-05-2024 19:53:35 ERROR com.company.recap3.exceptionhandlers.GlobalExceptionHandler - Method argument not valid: ErrorResponse(timestamp=2024-05-27T19:53:35.694280400, method=POST, title=Bad Request, status=400, path=/api/v1/author, error={email=Email cannot be empty or null})
+27-05-2024 19:53:51 ERROR com.company.recap3.exceptionhandlers.GlobalExceptionHandler - Method argument not valid: ErrorResponse(timestamp=2024-05-27T19:53:51.577673500, method=POST, title=Bad Request, status=400, path=/api/v1/author, error={email=Email must be a valid email address})

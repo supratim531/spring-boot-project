@@ -28,9 +28,9 @@ public class BookServiceImpl implements BookService {
 	public Book saveBook(Integer authorId, BookDTO bookDTO) {
 		Book book = BookMapper.convertToBook(bookDTO);
 		Author author = this.authorService.findAuthorById(authorId);
-
 		book.setAuthor(author);
 		author.setBook(book);
+
 		return this.bookRepository.save(book);
 	}
 
