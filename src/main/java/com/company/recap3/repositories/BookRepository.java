@@ -13,8 +13,8 @@ public interface BookRepository extends ListCrudRepository<Book, Integer> {
 
 	List<Book> findByTitleContaining(String title);
 
-	List<Book> findByPriceBetween(Long start, Long end);
+	List<Book> findByPriceBetween(Long startPrice, Long endPrice);
 
-	List<Book> findByReleasedYearBetween(String start, String end);
+	List<Book> findByReleasedYearBetween(String startYear, String endYear);
 
 }
